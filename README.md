@@ -25,6 +25,9 @@ access_token_secret = "..."
 `make dump` extract favs from favs.db to stdout  
 `make` to show all options
 
+## download media: pics, gif and videos
+Once we have downloaded the likes and we have the favs.ndjson file, we can run get_media.php with PHP8.
+
 ## alternatives
 
 [IFTTT](https://ifttt.com/applets/113241p-save-the-tweets-you-like-on-twitter-to-a-google-spreadsheet) - however it won't log tweets older than the previous liked tweet (eg: a tweet from 2018 if the last liked tweet was in 2019). I'm assuming it's using the `since_id` filter of the last recorded tweet when calling the [favourites api](https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/get-favorites-list).
