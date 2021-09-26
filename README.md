@@ -26,7 +26,9 @@ access_token_secret = "..."
 `make` to show all options
 
 `python get_favs.py` to download all favs.
+
 `python get_favs.py 25092021` (in DDMMYYYY format) to download only from recent to that past day.
+
 The new get_media.php downloads all media from your favs twits. `php get_media.php` after downloading the favs.ndjson 
 
 ## download media: pics, gif and videos

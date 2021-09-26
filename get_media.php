@@ -28,11 +28,16 @@ foreach ($arrTwits as $twit) {
                     $download_url = $media['media_url_https'];
                     break;
                 case 'video':
-                    $download_url = $media['video_info']['variants'][count($media['video_info']['variants'])-2]['url'];
+                    for ($i = count($media['video_info']['variants'])-1; $i > 0; $i--){
+                     if ($media['video_info']['variants'][$i]['content_type'] === 'video/mp4'){
+                     $download_url = $media['video_info']['variants'][$i]['url'];
+                     break;
+                     }
+                    }
                     break;
             }
             if ($download_url !== null){
-                exec("wget " . $download_url . " --connect-timeout=5 --tries=2 -N -P ./" . $media_folder);
+                exec("wget " . escapeshellarg($download_url) . " --connect-timeout=5 --tries=2 -N -P ./" . $media_folder);
             }
         }
     }else{
