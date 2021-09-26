@@ -43,10 +43,12 @@ necessary to reconstruct conversations I've faved, rt'd, or participated
 in.
 
 """
+import sys
 import tweepy
 import dbm
 import json
 import time
+from datetime import datetime
 
 import creds  # you must create creds.py
 
@@ -60,13 +62,21 @@ def get_api():
 def main():
     api = get_api()
     count = 0
+    downloadMaxDate = None
+    if len(sys.argv) == 2:
+        downloadMaxDate = datetime.strptime(sys.argv[1], '%d%m%Y')
+        print("Downloading only until this date: " + downloadMaxDate.strftime('%d/%m/%Y') + ' (%d/%m/%Y) included')
+
     with dbm.open('favs.db', 'c') as db, open('favs.ndjson', 'at', buffering=1) as jsonfile:
-        for status in tweepy.Cursor(api.favorites, creds.username,
-                                    count=200, include_entities=True, tweet_mode='extended').items():
+        for status in tweepy.Cursor(api.favorites, creds.username, count=200, include_entities=True, tweet_mode='extended').items():
             count = count + 1
             print(count)
             status_id = str(status.id)
             status_json = json.dumps(status._json)
+            if downloadMaxDate is not None:
+                # like_date = datetime.strptime(status.created_at, '%a %b %d %H:%M:%S %z %Y')
+                if status.created_at < downloadMaxDate:
+                    break
             if status_id not in db:
                 db[status_id] = status_json
                 jsonfile.write(status_json + "\n")
